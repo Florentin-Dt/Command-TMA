@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package epsi.tma.logistic.dao;
+package epsi.tma.dao;
 
 import epsi.tma.database.DatabaseSpring;
 import epsi.tma.entity.DatabaseVersioning;
-import epsi.tma.logistic.factory.IFactoryDatabaseVersioning;
+import epsi.tma.factory.IFactoryDatabaseVersioning;
 import epsi.tma.util.ParameterParserUtil;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

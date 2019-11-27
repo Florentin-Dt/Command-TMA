@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package epsi.tma.logistic.dao;
+package epsi.tma.dao;
 
 import epsi.tma.entity.CommandeStatutLog;
 import java.sql.ResultSet;

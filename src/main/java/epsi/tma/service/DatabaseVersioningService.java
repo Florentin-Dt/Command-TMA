@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package epsi.tma.logistic.service;
+package epsi.tma.service;
 
 import epsi.tma.entity.DatabaseVersioning;
-import epsi.tma.logistic.dao.IDatabaseVersioningDAO;
+import epsi.tma.dao.IDatabaseVersioningDAO;
 import java.util.ArrayList;
 import java.util.Map;
 import org.apache.log4j.*;

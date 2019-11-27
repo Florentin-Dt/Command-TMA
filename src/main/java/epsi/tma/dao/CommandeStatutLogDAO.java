@@ -1,8 +1,8 @@
-package epsi.tma.logistic.dao;
+package epsi.tma.dao;
 
 import epsi.tma.database.DatabaseSpring;
 import epsi.tma.entity.CommandeStatutLog;
-import epsi.tma.logistic.factory.IFactoryCommandeStatutLog;
+import epsi.tma.factory.IFactoryCommandeStatutLog;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

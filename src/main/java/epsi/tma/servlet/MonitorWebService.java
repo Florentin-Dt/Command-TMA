@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package epsi.tma.logistic.servlet;
+package epsi.tma.servlet;
 
-import epsi.tma.logistic.service.IDatabaseVersioningService;
+import epsi.tma.service.IDatabaseVersioningService;
 import java.sql.Timestamp;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;

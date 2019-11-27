@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package epsi.tma.logistic.service;
+package epsi.tma.service;
 
 import java.util.Map;
 

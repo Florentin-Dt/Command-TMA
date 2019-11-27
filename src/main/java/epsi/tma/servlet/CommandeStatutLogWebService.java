@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package epsi.tma.logistic.servlet;
+package epsi.tma.servlet;
 
-import epsi.tma.logistic.dao.ICommandeStatutLogDAO;
-import epsi.tma.logistic.service.IDatabaseVersioningService;
+import epsi.tma.dao.ICommandeStatutLogDAO;
+import epsi.tma.service.IDatabaseVersioningService;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

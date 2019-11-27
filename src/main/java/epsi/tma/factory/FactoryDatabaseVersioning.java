@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package epsi.tma.logistic.factory;
+package epsi.tma.factory;
 
 import epsi.tma.entity.DatabaseVersioning;
 import org.springframework.stereotype.Service;

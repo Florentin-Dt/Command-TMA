@@ -1,6 +1,6 @@
-package epsi.tma.logistic.service;
+package epsi.tma.service;
 
-import epsi.tma.logistic.dao.IDatabaseVersioningDAO;
+import epsi.tma.dao.IDatabaseVersioningDAO;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
