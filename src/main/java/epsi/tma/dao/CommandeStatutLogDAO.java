@@ -48,10 +48,7 @@ public class CommandeStatutLogDAO implements ICommandeStatutLogDAO {
             PreparedStatement prestat = connection.prepareStatement(query.toString());
             ResultSet resultSet = prestat.executeQuery();
             while (resultSet.next()) {
-                System.out.println("start while dao");
-                CommandeStatutLog commandeStatutLog = factoryCommandeStatutLog.create(resultSet.findColumn("idLog"),resultSet.findColumn("idCommande"), resultSet.findColumn("idEtat"), resultSet.getTimestamp("horodatage"), resultSet.getString("emmeteur"), resultSet.getString("Action"));
-                listeLog.add(commandeStatutLog);
-                System.out.println("End while dao");
+            listeLog.add(this.loadCommandSttLogFromResultSet(resultSet));
             }
             System.out.println("response dao");
             response.put("Log-list", listeLog);
@@ -61,6 +58,16 @@ public class CommandeStatutLogDAO implements ICommandeStatutLogDAO {
             System.out.println(exception);
         }
         return response;
+    }
+
+    public CommandeStatutLog loadCommandSttLogFromResultSet(ResultSet rs) throws SQLException {
+            Integer idLog = rs.getInt("idLog");
+            Integer idEtat = rs.getInt("idEtat");
+            Integer idCommande = rs.getInt("idCommande");
+            Timestamp horodatage = rs.getTimestamp("horodatage");
+            String emmeteur = rs.getString("emmeteur");
+            String action = rs.getString("action");
+            return factoryCommandeStatutLog.create(idLog, idCommande, idEtat, horodatage, emmeteur, action);
     }
 
     //public String create(String emmeteur, String action, int idCommande, Timestamp horodatage, int idProduit)

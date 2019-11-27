@@ -18,8 +18,7 @@ import java.util.Map;
 public interface ICommandeStatutLogDAO {
     
     public Map<String,Object> read();
-    
-    //public CommandeStatutLog loadFromResultSet(ResultSet rs) throws SQLException; 
-   // public String create(String emmeteur, String action, int idCommande, Timestamp horodatage, int idProduit);
+    //public CommandeStatutLog loadFromResultSet(ResultSet rs) throws SQLException;
+    // public String create(String emmeteur, String action, int idCommande, Timestamp horodatage, int idProduit);
     
 }

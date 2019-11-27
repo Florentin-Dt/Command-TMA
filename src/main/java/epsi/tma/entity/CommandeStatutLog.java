@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 
 /**
  *
- * @author utilisateur
+ * @author cDelage
  */
 public class CommandeStatutLog {
 

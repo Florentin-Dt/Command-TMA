@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
  */
 
 /**
- *
- * @author utilisateur
+ * Service to read and create log from command handling
+ * @author cDelage
  */
 @Service
 public class CommandeStatutLogService implements ICommandeStatutLogService{

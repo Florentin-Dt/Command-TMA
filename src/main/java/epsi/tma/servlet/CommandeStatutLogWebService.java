@@ -20,8 +20,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- *
- * @author utilisateur
+ * Webservice to read log generate by command handling
+ * 
+ * @author cDelage
  */
 @Path("/commandeLog")
 public class CommandeStatutLogWebService {
