@@ -29,4 +29,6 @@ public interface IDatabaseVersioningService {
     public void updateNumberVersion(Integer version);
     
     public Map<String, Object> readDatabaseInformation();
+    
+    public Map<String, Object> readGenericInformation();
 }

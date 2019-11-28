@@ -5,13 +5,16 @@
  */
 package epsi.tma.service;
 
+import epsi.tma.config.Property;
 import epsi.tma.entity.DatabaseVersioning;
 import epsi.tma.dao.IDatabaseVersioningDAO;
-import java.sql.Timestamp;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,12 +49,12 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
             int i = 0;
             if (!this.isDatabaseUptodate()) {
                 for (String sqlUpdate : sqlList) {
-                    if (currentDatabaseVersion.getVersion()-1 < i || currentDatabaseVersion.getVersion() == 0) {
+                    if (currentDatabaseVersion.getVersion() - 1 < i || currentDatabaseVersion.getVersion() == 0) {
                         this.updateSingleVersion(sqlList.get(i));
                     }
                     i++;
                 }
-                
+
                 this.updateNumberVersion(sqlList.size());
                 LOG.debug("DATABASE VERSION IS UPDATE FROM {} TO {}", currentDatabaseVersion.getVersion(), sqlList.size());
                 response = "DATABASE VERSION IS UPDATE FROM " + currentDatabaseVersion.getVersion() + " TO " + sqlList.size();
@@ -103,15 +106,27 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
         this.databaseversioningDAO.updateNumberVersion(version);
     }
 
+    /*
+     * read multiple information of Database and Back
+     * for database use this.readDatabaseInformation
+     * for project information from maven use MavenXpp3Reader
+     */
+    @Override
+    public Map<String, Object> readGenericInformation() {
+        Map<String, Object> map = this.readDatabaseInformation();
+        try {
+            map.put("Project version", Property.VERSION);
+            map.put("Project name", Property.NAME);
+            map.put("Project group_id", Property.GROUP_ID);
+
+        } catch (Exception e) {
+            LOG.error("Failed to read mvn information, catch exception : ", e);
+        }
+        return map;
+    }
+
     @Override
     public Map<String, Object> readDatabaseInformation() {
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        try {
-            LOG.debug("CREEATE STATUT LOG IN DB SERVICE");
-            commandeStatutLogService.create("ADMIN", "TEST", 0, now, 1, 1);
-        } catch (Exception exception) {
-            LOG.error("Failed to create command status log, catch exception : ", exception);
-        }
         return databaseversioningDAO.readDatabaseInformation();
     }
 

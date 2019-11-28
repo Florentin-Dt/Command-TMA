@@ -126,7 +126,6 @@ public class DatabaseVersioningDAO implements IDatabaseVersioningDAO {
             preStat.executeUpdate();
         } catch (Exception exception) {
             LOG.error("Failed to update version number, catched exception", exception);
-            System.out.println("Error to updateNumberVersion, catch exception : " + exception);
         }
     }
 
