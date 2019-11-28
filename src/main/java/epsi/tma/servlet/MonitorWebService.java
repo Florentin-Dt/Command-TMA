@@ -14,8 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.LogManager;
+//import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -29,7 +29,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 @Path("/monitorWebService")
 public class MonitorWebService {
 
-    private static final Logger LOG = LogManager.getLogger(MonitorWebService.class);
+    //private static final Logger LOG = LogManager.getLogger(MonitorWebService.class);
 
     private IDatabaseVersioningService databaseVersioningService;
 
@@ -41,13 +41,13 @@ public class MonitorWebService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getDatabaseVersion")
     public Response getVersion(@Context ServletContext servletContext) {
-        LOG.info("get version of database call");
+        //LOG.info("get version of database call");
         try {
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             this.databaseVersioningService = appContext.getBean(IDatabaseVersioningService.class);
             return Response.ok(databaseVersioningService.findMyVersionByKey("DatabaseVersion")).build();
         } catch (Exception e) {
-            LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
+         //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
             return Response.ok(e).build();
         }
 
@@ -62,7 +62,7 @@ public class MonitorWebService {
             this.databaseVersioningService = appContext.getBean(IDatabaseVersioningService.class);
             return Response.ok(databaseVersioningService.updateDatabaseVersion()).build();
         } catch (Exception e) {
-            LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
+         //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
             return Response.ok(e).build();
         }
     }
@@ -77,22 +77,8 @@ public class MonitorWebService {
             this.databaseVersioningService = appContext.getBean(IDatabaseVersioningService.class);
             return Response.ok(databaseVersioningService.readDatabaseInformation()).build();
         } catch (Exception e) {
-            LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
+         //ss   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
             return Response.ok(e).build();
         }
     }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/timeStamp")
-    public Response timeStamp() {
-        try {
-            Timestamp maDate = new Timestamp(System.currentTimeMillis());
-            return Response.ok(maDate.toString()    ).build();
-        } catch (Exception e) {
-            LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
-            return Response.ok(e).build();
-        }
-    }
-
 }

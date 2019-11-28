@@ -7,9 +7,11 @@ package epsi.tma.service;
 
 import epsi.tma.entity.DatabaseVersioning;
 import epsi.tma.dao.IDatabaseVersioningDAO;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
-import org.apache.log4j.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,34 +27,50 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
     @Autowired
     IDatabaseVersioningDAO databaseversioningDAO;
 
+    @Autowired
+    ICommandeStatutLogService commandeStatutLogService;
+
+    /*
+     * update database version
+     * call compare method and update new version of database
+     * Versioning based on number of sql command in sql-list (this.getSQLScript -> List)
+     * 
+     */
     @Override
     public String updateDatabaseVersion() {
-        LOG.info("updateDatabaseVersion running");
-        System.out.println("updateDatabaseVersion running");
+        LOG.info("DATABASE UPDATE START");
         String response = new String();
         DatabaseVersioning currentDatabaseVersion = findMyVersionByKey("DatabaseVersion");
         ArrayList<String> sqlList = this.getSQLScript();
-        int i = 0;
         try {
+            int i = 0;
             if (!this.isDatabaseUptodate()) {
                 for (String sqlUpdate : sqlList) {
-                    if (i > currentDatabaseVersion.getVersion() || currentDatabaseVersion.getVersion() == 0) {
-                        LOG.info("Update sql version launched for request " + sqlList.get(i));
+                    if (currentDatabaseVersion.getVersion()-1 < i || currentDatabaseVersion.getVersion() == 0) {
                         this.updateSingleVersion(sqlList.get(i));
                     }
-                    i = i + 1;
+                    i++;
                 }
+                
+                this.updateNumberVersion(sqlList.size());
+                LOG.debug("DATABASE VERSION IS UPDATE FROM {} TO {}", currentDatabaseVersion.getVersion(), sqlList.size());
+                response = "DATABASE VERSION IS UPDATE FROM " + currentDatabaseVersion.getVersion() + " TO " + sqlList.size();
+            } else {
+                response = "DATABASE ALREADY UPTODATE";
             }
-            this.updateNumberVersion(sqlList.size());
-            response = "Update database version run successfuly";
         } catch (Exception exception) {
-            LOG.error("Catched exception", exception);
-            response = "Catched exception during update of databaseversion : " + exception;
+            LOG.error("Catch exception during database update : ", exception);
+            response = "Catch exception during database update : " + exception;
         }
 
         return response;
     }
 
+    /*
+     * is database up to date
+     * will compare back-end version to database stored version
+     * @return true if database is up to date and false in reverse case
+     */
     @Override
     public boolean isDatabaseUptodate() {
         // Getting the Full script to update the database.
@@ -86,10 +104,17 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
     }
 
     @Override
-    public Map<String, Object> readDatabaseInformation(){
-    return databaseversioningDAO.readDatabaseInformation();
+    public Map<String, Object> readDatabaseInformation() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        try {
+            LOG.debug("CREEATE STATUT LOG IN DB SERVICE");
+            commandeStatutLogService.create("ADMIN", "TEST", 0, now, 1, 1);
+        } catch (Exception exception) {
+            LOG.error("Failed to create command status log, catch exception : ", exception);
+        }
+        return databaseversioningDAO.readDatabaseInformation();
     }
-            
+
     @Override
     public ArrayList<String> getSQLScript() {
         // Temporary string that will store the SQL Command before putting in the array.
@@ -121,7 +146,6 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
         //   create a new one to secure that it gets executed in all env.
         // ***********************************************
         // ***********************************************
-
         b = new StringBuilder();
         b.append("CREATE TABLE Magasin (");
         b.append("idMagasin INT PRIMARY KEY NOT NULL AUTO_INCREMENT,");
@@ -151,11 +175,11 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
         b = new StringBuilder();
         b.append("INSERT INTO `Produit` (`nomProduit`) VALUES ('produit1');");
         a.add(b.toString());
-        
+
         b = new StringBuilder();
         b.append("INSERT INTO `Produit` (`nomProduit`) VALUES ('produit2');");
         a.add(b.toString());
-        
+
         b = new StringBuilder();
         b.append("INSERT INTO `Produit` (`nomProduit`) VALUES ('produit3');");
         a.add(b.toString());
@@ -170,14 +194,14 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
         b = new StringBuilder();
         b.append("INSERT INTO `Entrepot` (`nomEntrepot`) VALUES ('entrepot1');");
         a.add(b.toString());
-        
+
         b = new StringBuilder();
         b.append("CREATE TABLE Etat (");
         b.append("idEtat INT PRIMARY KEY NOT NULL,");
         b.append("descriptionEtat VARCHAR(50)");
         b.append(");");
         a.add(b.toString());
-        
+
         b = new StringBuilder();
         b.append("INSERT INTO `Etat` (`idEtat`,`descriptionEtat`) VALUES (1, 'Demande de préparation');");
         a.add(b.toString());
@@ -185,15 +209,15 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
         b = new StringBuilder();
         b.append("INSERT INTO `Etat` (`idEtat`,`descriptionEtat`) VALUES (2, 'En cours de préparation');");
         a.add(b.toString());
-        
+
         b = new StringBuilder();
         b.append("INSERT INTO `Etat` (`idEtat`,`descriptionEtat`) VALUES (3, 'Commande finie');");
         a.add(b.toString());
-        
+
         b = new StringBuilder();
         b.append("INSERT INTO `Etat` (`idEtat`,`descriptionEtat`) VALUES (4, 'Commande du jour');");
         a.add(b.toString());
-        
+
         b = new StringBuilder();
         b.append("CREATE TABLE Commande (");
         b.append("idCommande INT PRIMARY KEY NOT NULL,");

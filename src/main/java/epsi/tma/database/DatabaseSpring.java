@@ -8,12 +8,11 @@ package epsi.tma.database;
 import epsi.tma.config.Property;
 import java.sql.Connection;
 import java.sql.SQLException;
-import javax.annotation.PostConstruct;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -30,7 +29,6 @@ public class DatabaseSpring {
     private DataSource dataSource;
     private boolean onTransaction = false;
     private Connection conn;
-
 
     /**
      * Create connection.

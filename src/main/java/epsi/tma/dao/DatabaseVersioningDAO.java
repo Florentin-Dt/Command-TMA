@@ -17,8 +17,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -43,13 +43,6 @@ public class DatabaseVersioningDAO implements IDatabaseVersioningDAO {
     public DatabaseVersioning findMyVersionByKey(String key) {
         DatabaseVersioning result = new DatabaseVersioning();
         final String query = "SELECT * FROM DatabaseVersioning dv WHERE dv.`key` = ? ";
-
-        // Debug message on SQL.
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("SQL : " + query);
-            LOG.debug("SQL.param.key : " + key);
-        }
-        LOG.info("findMyVersionByKey launched, try to connect to database");
 
         try {
             Connection connection = this.databaseSpring.connect();
@@ -100,7 +93,7 @@ public class DatabaseVersioningDAO implements IDatabaseVersioningDAO {
             key = ParameterParserUtil.parseStringParam(resultSet.getString("Key"), "DatabaseVersion");
             value = ParameterParserUtil.parseIntegerParam(resultSet.getInt("Value"), 0);
         } catch (SQLException ex) {
-            LOG.warn(ex);
+            LOG.warn("Catch exception during load from resultset : ", ex);
         }
 
         return factoryDatabaseVersioning.create(key, value);
@@ -109,20 +102,12 @@ public class DatabaseVersioningDAO implements IDatabaseVersioningDAO {
     @Override
     public String updateSingleVersion(String SQLString) {
         LOG.info("Starting Execution of '" + SQLString + "'");
-        System.out.println("-------------------------------");
-        System.out.println("DAO - updateSingleVersion");
-        System.out.println(SQLString);
-        System.out.println("-------------------------------");
         try (Connection connection = this.databaseSpring.connect();
                 Statement preStat = connection.createStatement();) {
             preStat.execute(SQLString);
-            LOG.info("'" + SQLString + "' Executed successfully.");
+            //    LOG.info("'" + SQLString + "' Executed successfully.");
         } catch (Exception exception) {
             LOG.error(exception.toString(), exception);
-            System.out.println("-------------------------------");
-            System.out.println("DAO - error catch");
-            System.out.println(exception.getMessage());
-            System.out.println("-------------------------------");
             return exception.toString();
         } finally {
             this.databaseSpring.closeConnection();
@@ -164,7 +149,7 @@ public class DatabaseVersioningDAO implements IDatabaseVersioningDAO {
 
             response.put("JDBCMajorVersion", Integer.toString(metaData.getJDBCMajorVersion()));
             response.put("JDBCMinorVersion", Integer.toString(metaData.getJDBCMinorVersion()));
-            
+
         } catch (SQLException exception) {
             LOG.error("Catch sql exception during read database information, ", exception);
             response.put("SQL Exception", exception);

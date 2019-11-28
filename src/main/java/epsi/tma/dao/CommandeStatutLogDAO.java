@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,47 +28,69 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class CommandeStatutLogDAO implements ICommandeStatutLogDAO {
-
+    
     private static final Logger LOG = LogManager.getLogger(CommandeStatutLogDAO.class);
-
+    
     @Autowired
     private DatabaseSpring databaseSpring;
-
+    
     @Autowired
     private IFactoryCommandeStatutLog factoryCommandeStatutLog;
-
+    
     public Map<String, Object> read() {
+        LOG.debug("READ - CommandStatutLogDAO");
         Map<String, Object> response = new HashMap();
         List<CommandeStatutLog> listeLog = new ArrayList();
         StringBuilder query = new StringBuilder();
         query.append("SELECT * FROM CommandeStatutLog");
         Connection connection = this.databaseSpring.connect();
-
+        
         try {
             PreparedStatement prestat = connection.prepareStatement(query.toString());
             ResultSet resultSet = prestat.executeQuery();
             while (resultSet.next()) {
-            listeLog.add(this.loadCommandSttLogFromResultSet(resultSet));
+                listeLog.add(this.loadCommandSttLogFromResultSet(resultSet));
             }
-            System.out.println("response dao");
             response.put("Log-list", listeLog);
         } catch (SQLException exception) {
             response.put("Fail log-list loading", exception.getMessage());
             LOG.error("Fail log-list loading, exception : ", exception);
-            System.out.println(exception);
         }
         return response;
     }
-
+    
+    @Override
     public CommandeStatutLog loadCommandSttLogFromResultSet(ResultSet rs) throws SQLException {
-            Integer idLog = rs.getInt("idLog");
-            Integer idEtat = rs.getInt("idEtat");
-            Integer idCommande = rs.getInt("idCommande");
-            Timestamp horodatage = rs.getTimestamp("horodatage");
-            String emmeteur = rs.getString("emmeteur");
-            String action = rs.getString("action");
-            return factoryCommandeStatutLog.create(idLog, idCommande, idEtat, horodatage, emmeteur, action);
+        Integer idLog = rs.getInt("idLog");
+        Integer idEtat = rs.getInt("idEtat");
+        Integer idCommande = rs.getInt("idCommande");
+        Timestamp horodatage = rs.getTimestamp("horodatage");
+        String emmeteur = rs.getString("emmeteur");
+        String action = rs.getString("action");
+        return factoryCommandeStatutLog.create(idLog, idCommande, idEtat, horodatage, emmeteur, action);
     }
+    
+    @Override
+    public String create(String emmeteur, String action, int idCommande, Timestamp horodatage, int idProduit, int idEtat) {
 
-    //public String create(String emmeteur, String action, int idCommande, Timestamp horodatage, int idProduit)
+        LOG.debug("CREATE - CommandeStatutLogDAO");
+        String response = new String();
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO `CommandeStatutLog` (`idCommande`,`idEtat`,`horodatage`,`emmeteur`,`action`) VALUES (?, ?, ?, ?, ?);");
+        Connection connection = this.databaseSpring.connect();
+        try {
+            PreparedStatement preStat = connection.prepareStatement(query.toString());
+            preStat.setInt(1, idCommande);
+            preStat.setInt(2, idEtat);
+            preStat.setTimestamp(3, horodatage);
+            preStat.setString(4, emmeteur);
+            preStat.setString(5, action);
+            preStat.executeUpdate();
+            response = "create log entry successfully";
+        } catch (SQLException exception) {
+            LOG.error("Catch exception during create Commande status log :", exception);
+            response =" Failed to create log entry, catch exception : " + exception.getMessage();
+        }
+        return response;
+    }
 }
