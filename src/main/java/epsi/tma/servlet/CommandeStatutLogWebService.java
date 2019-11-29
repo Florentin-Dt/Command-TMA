@@ -6,6 +6,7 @@
 package epsi.tma.servlet;
 
 import epsi.tma.dao.ICommandeStatutLogDAO;
+import epsi.tma.service.ICommandeStatutLogService;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,7 +29,7 @@ public class CommandeStatutLogWebService {
 
     private static final Logger LOG = LogManager.getLogger(MonitorWebService.class);
 
-    private ICommandeStatutLogDAO commandeStatutLogDAO;
+    private ICommandeStatutLogService commandeStatutLogService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -37,8 +38,8 @@ public class CommandeStatutLogWebService {
         LOG.info("READ - CommandStatutLogWebService");
         try {
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-            this.commandeStatutLogDAO = appContext.getBean(ICommandeStatutLogDAO.class);
-            return Response.ok(commandeStatutLogDAO.read()).build();
+            this.commandeStatutLogService = appContext.getBean(ICommandeStatutLogService.class);
+            return Response.ok(commandeStatutLogService.read()).build();
         } catch (Exception e) {
             LOG.error("Catch error during read from commandeStatutLogWebService web service : ", e);
             return Response.ok(e).build();
