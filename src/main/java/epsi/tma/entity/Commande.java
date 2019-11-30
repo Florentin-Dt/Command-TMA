@@ -14,6 +14,7 @@ public class Commande {
     private int idProduit;
     private int idMagasin;
     private int idEntrepot;
+    private int idEtat;
     
     public int getIdCommande(){
         return this.idCommande;
@@ -31,6 +32,10 @@ public class Commande {
         return this.idEntrepot;
     }
     
+    public int getIdEtat(){
+        return this.idEtat;
+    }
+    
     public void setIdCommande(int pIdCommande){
         this.idCommande = pIdCommande;
     }
@@ -45,5 +50,9 @@ public class Commande {
     
     public void setIdEntrepot(int pIdEntrepot){
         this.idCommande = pIdEntrepot;
+    }
+    
+    public void setIdEtat(int pIdEtat){
+        this.idEtat = pIdEtat;
     }
 }

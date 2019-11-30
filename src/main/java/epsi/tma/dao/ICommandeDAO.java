@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package epsi.tma.factory;
-import epsi.tma.entity.Commande;
+package epsi.tma.dao;
 
 /**
  *
  * @author florentin
  */
-public interface IFactoryCommande {
-    public Commande create(int pIdCommande, int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat);
+public interface ICommandeDAO {
+    /**
+     * Function to generate orders
+     * 
+     */
+    public void create(int idCommande, int idProduit, int idMagasin, int idEntrepot, int idEtat);
 }
