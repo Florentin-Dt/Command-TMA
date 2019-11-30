@@ -261,6 +261,21 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
         b.append("ADD COLUMN idEtat INT NOT NULL,");
         b.append("ADD CONSTRAINT fk_idEtat_etatCmd FOREIGN KEY (idEtat) REFERENCES Etat(idEtat);");
         a.add(b.toString()); 
+
+        b = new StringBuilder();
+        b.append("ALTER TABLE CommandeStatutLog ");
+        b.append("DROP FOREIGN KEY fk_idCommande_commande;");
+        a.add(b.toString());
+        
+        b = new StringBuilder();
+        b.append("ALTER TABLE Commande ");
+        b.append("MODIFY idCommande INT AUTO_INCREMENT;");
+        a.add(b.toString());
+        
+        b = new StringBuilder();
+        b.append("ALTER TABLE CommandeStatutLog ");
+        b.append("ADD CONSTRAINT fk_idCommande_commande FOREIGN KEY (idCommande) REFERENCES Commande(idCommande);");
+        a.add(b.toString());
         
         return a;
     }

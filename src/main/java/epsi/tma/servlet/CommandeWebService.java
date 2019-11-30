@@ -30,7 +30,7 @@ public class CommandeWebService {
     private ICommandeService commandeService;
     
     /*
-     * read database version
+     * Create orders
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -38,14 +38,32 @@ public class CommandeWebService {
     public Response createOrders(@Context ServletContext servletContext) {
         LOG.info("create orders call");
         try {
-            //return Response.ok("COUCOU").build();
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             this.commandeService = appContext.getBean(ICommandeService.class);
             return Response.ok(commandeService.simulateMagasinCommande()).build();
-            //return Response.ok(this.commandeService).build();
         } catch (Exception e) {
          //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
             return Response.ok(e).build();
         }
     }
+    
+    /*
+     * Update orders
+     */
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/updateOrders")
+//    public Response updateState(@Context ServletContext servletContext) {
+//        LOG.info("create orders call");
+//        try {
+//            ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+//            this.commandeService = appContext.getBean(ICommandeService.class);
+//            return Response.ok(commandeService.updateOrders()).build();
+//        } catch (Exception e) {
+//         //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
+//            return Response.ok(e).build();
+//        }
+//    }
+    
+    
 }

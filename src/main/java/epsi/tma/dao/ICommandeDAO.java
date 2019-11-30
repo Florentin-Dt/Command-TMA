@@ -14,5 +14,6 @@ public interface ICommandeDAO {
      * Function to generate orders
      * 
      */
-    public void create(int idCommande, int idProduit, int idMagasin, int idEntrepot, int idEtat);
+    public void create(int idProduit, int idMagasin, int idEntrepot, int idEtat);
+    public void updateState(int newState);
 }

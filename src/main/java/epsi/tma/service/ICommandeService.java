@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface ICommandeService {
     
-    public void create(int pIdCommande, int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat);
-    public void update(List<Commande> commandes);
+    public void create(int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat);
+    public void updateState(int newState);
     public String simulateMagasinCommande();
 }

@@ -22,13 +22,13 @@ public class CommandeService implements ICommandeService{
     ICommandeDAO commandeDAO;
     
     @Override
-    public void create(int pIdCommande, int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat) {
-        this.commandeDAO.create(pIdCommande, pIdProduit, pIdMagasin, pIdEntrepot, pIdEtat);
+    public void create(int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat) {
+        this.commandeDAO.create(pIdProduit, pIdMagasin, pIdEntrepot, pIdEtat);
     }
 
     @Override
-    public void update(List<Commande> commandes) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void updateState(int newState) {
+        this.commandeDAO.updateState(newState);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CommandeService implements ICommandeService{
         String response = new String();
 
         for (int i=1; i<=10; i++) {
-           create(i,i,i,i,i);
+           this.create(i,i,i,i);
            response += "Requête "+ i +"\n";
         }
 
