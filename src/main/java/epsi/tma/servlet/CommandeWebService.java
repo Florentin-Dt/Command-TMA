@@ -41,8 +41,8 @@ public class CommandeWebService {
             //return Response.ok("COUCOU").build();
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             this.commandeService = appContext.getBean(ICommandeService.class);
-            //return Response.ok(commandeService.simulateMagasinCommande()).build();
-            return Response.ok("COUCOU").build();
+            return Response.ok(commandeService.simulateMagasinCommande()).build();
+            //return Response.ok(this.commandeService).build();
         } catch (Exception e) {
          //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
             return Response.ok(e).build();

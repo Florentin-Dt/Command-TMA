@@ -6,11 +6,13 @@
 package epsi.tma.factory;
 
 import epsi.tma.entity.Commande;
+import org.springframework.stereotype.Service;
 
 /**
  * Factory to create Commande instance
  * @author florentin
  */
+@Service
 public class FactoryCommande implements IFactoryCommande {
 
     @Override

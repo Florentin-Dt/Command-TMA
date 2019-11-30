@@ -9,11 +9,13 @@ import epsi.tma.dao.ICommandeDAO;
 import epsi.tma.entity.Commande;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author florentin
  */
+@Service
 public class CommandeService implements ICommandeService{
     
     @Autowired
@@ -33,11 +35,12 @@ public class CommandeService implements ICommandeService{
     public String simulateMagasinCommande() {
         String response = new String();
 
-        /*for (int i=1; i<=10; i++) {
+        for (int i=1; i<=10; i++) {
            create(i,i,i,i,i);
-        }*/
+           response += "Requête "+ i +"\n";
+        }
 
-        response = "Simulation create with success";
+        response += "Simulation create with success ";
         return response;
     }
     

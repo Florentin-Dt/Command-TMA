@@ -6,21 +6,21 @@
 package epsi.tma.dao;
 
 import epsi.tma.database.DatabaseSpring;
-import epsi.tma.entity.DatabaseVersioning;
 import epsi.tma.factory.IFactoryCommande;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author florentin
  */
+@Repository
 public class CommandeDAO implements ICommandeDAO {
     
     private static final Logger LOG = LogManager.getLogger(CommandeDAO.class);
@@ -34,7 +34,7 @@ public class CommandeDAO implements ICommandeDAO {
     @Override
     public void create(int idCommande, int idProduit, int idMagasin, int idEntrepot, int idEtat) {
         
-        final String query = "INSERT INTO Commande(idCommande, idProduit, idMagasin, IdEntrepot) VALUES(?, ?, ?, ?)";  
+        final String query = "INSERT INTO Commande(idCommande, idProduit, idMagasin, IdEntrepot, idEtat) VALUES(?, ?, ?, ?, ?)";  
         
         try {
             Connection connection = this.databaseSpring.connect();
@@ -45,6 +45,7 @@ public class CommandeDAO implements ICommandeDAO {
                     preStat.setInt(2, idProduit);
                     preStat.setInt(3, idMagasin);
                     preStat.setInt(4, idEntrepot);
+                    preStat.setInt(5, idEtat);
                     preStat.executeUpdate();
                 } catch (SQLException exception) { 
                     LOG.warn("Unable to execute query : " + exception.toString());
