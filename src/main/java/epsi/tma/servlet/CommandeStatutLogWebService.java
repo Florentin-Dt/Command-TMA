@@ -5,7 +5,6 @@
  */
 package epsi.tma.servlet;
 
-import epsi.tma.dao.ICommandeStatutLogDAO;
 import epsi.tma.service.ICommandeStatutLogService;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
@@ -24,7 +23,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * @author cDelage
  */
-@Path("/commandeLog")
+@Path("/commandelog")
 public class CommandeStatutLogWebService {
 
     private static final Logger LOG = LogManager.getLogger(MonitorWebService.class);

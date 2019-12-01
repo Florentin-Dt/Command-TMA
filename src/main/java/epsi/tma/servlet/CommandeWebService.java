@@ -24,7 +24,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * @author florentin
  */
-@Path("/commandeWebService")
+@Path("/command")
 public class CommandeWebService {
 
     private static final Logger LOG = LogManager.getLogger(CommandeWebService.class);

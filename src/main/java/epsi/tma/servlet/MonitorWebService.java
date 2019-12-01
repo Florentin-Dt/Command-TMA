@@ -28,7 +28,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * @author Corentin Delage
  */
-@Path("/monitorWebService")
+@Path("/monitor")
 public class MonitorWebService {
 
     private static final Logger LOG = LogManager.getLogger(MonitorWebService.class);
@@ -36,30 +36,11 @@ public class MonitorWebService {
     private IDatabaseVersioningService databaseVersioningService;
 
     /*
-     * read database version
-     */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/getDatabaseVersion")
-    public Response getVersion(@Context ServletContext servletContext) {
-        LOG.info("get version of database call");
-        try {
-            ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-            this.databaseVersioningService = appContext.getBean(IDatabaseVersioningService.class);
-            return Response.ok(databaseVersioningService.findMyVersionByKey("DatabaseVersion")).build();
-        } catch (Exception e) {
-         //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
-            return Response.ok(e).build();
-        }
-
-    }
-
-    /*
     * updateDatabase if current version is under DatabaseVersioningService version
     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/updateDatabase")
+    @Path("/update")
     public Response updateDatabase(@Context ServletContext servletContext) {
         try {
             LOG.info("UPDATE DATABASE VERSION - MONITOR WEBSERVICE");
@@ -77,7 +58,7 @@ public class MonitorWebService {
     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/readInfo")
+    @Path("/read")
     public Response readDatabaseInfo(@Context ServletContext servletContext) {
         try {
             LOG.debug("READ APPLICATION INFORMATION - MONITOR WEBSERVICE");
