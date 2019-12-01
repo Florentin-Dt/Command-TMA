@@ -6,12 +6,15 @@
 package epsi.tma.dao;
 
 import epsi.tma.database.DatabaseSpring;
+import epsi.tma.entity.Commande;
 import epsi.tma.factory.IFactoryCommande;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +26,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class CommandeDAO implements ICommandeDAO {
-    
+
     private static final Logger LOG = LogManager.getLogger(CommandeDAO.class);
-    
+
     @Autowired
     private DatabaseSpring databaseSpring;
 
@@ -33,110 +36,38 @@ public class CommandeDAO implements ICommandeDAO {
     private IFactoryCommande factoryCommande;
 
     @Override
-    public void create(int idProduit, int idMagasin, int idEntrepot, int idEtat) {
-        
-        final String query = "INSERT INTO Commande(idProduit, idMagasin, IdEntrepot, idEtat) VALUES(?, ?, ?, ?)";  
-        
+    public int create(int idProduit, int idMagasin, int idEntrepot, int idEtat) {
+        int result = 0;
+        final String query = "INSERT INTO Commande(idProduit, idMagasin, IdEntrepot, idEtat) VALUES(?, ?, ?, ?);";
+        LOG.debug("CREATE COMMAND ENTRY - COMMANDDAO");
         try {
             Connection connection = this.databaseSpring.connect();
             try {
-                PreparedStatement preStat = connection.prepareStatement(query);
-                try { 
-                    connection.setAutoCommit(false);
+                PreparedStatement preStat = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                try {
                     preStat.setInt(1, idProduit);
                     preStat.setInt(2, idMagasin);
                     preStat.setInt(3, idEntrepot);
                     preStat.setInt(4, idEtat);
                     preStat.execute();
-                    connection.commit();
-                } catch (SQLException exception) { 
-                    LOG.warn("Unable to execute query : " + exception.toString());
-                } finally {
-                    preStat.close();
-                }
-            } catch (SQLException exception) {
-                LOG.warn("Unable to execute query : " + exception.toString());
-            } finally {
-                try {
-                    if (connection != null) {
-                        connection.close();
-                    }
-                } catch (SQLException e) {
-                    LOG.warn(e.toString());
-                }
-            }
-        } catch (Exception exception) {
-            LOG.error("Failed to connect to database, catched Exception : ", exception);
-        }
-    }
-    
-    @Override
-    public void updateState(int newState) {
-        
-        final String query = "UPDATE Commande SET idEtat = ?";  
-        
-        try {
-            Connection connection = this.databaseSpring.connect();
-            try {
-                PreparedStatement preStat = connection.prepareStatement(query);
-                try { 
-                    connection.setAutoCommit(false);
-                    preStat.setInt(1, newState);
-                    preStat.executeUpdate();
-                    connection.commit();
-                } catch (SQLException exception) { 
-                    LOG.warn("Unable to execute query : " + exception.toString());
-                } finally {
-                    preStat.close();
-                }
-            } catch (SQLException exception) {
-                LOG.warn("Unable to execute query : " + exception.toString());
-            } finally {
-                try {
-                    if (connection != null) {
-                        connection.close();
-                    }
-                } catch (SQLException e) {
-                    LOG.warn(e.toString());
-                }
-            }
-        } catch (Exception exception) {
-            LOG.error("Failed to connect to database, catched Exception : ", exception);
-        }
-    }
-    
-    
-    /*public boolean existState(int state){
-        final String query = "SELECT * FROM Etat WHERE idEtat = ?"; 
-        
-        try {
-            Connection connection = this.databaseSpring.connect();
-            try {
-                PreparedStatement preStat = connection.prepareStatement(query);
-                try { 
-                    preStat.setInt(1, state);
-                    ResultSet resultSet = preStat.executeQuery();
+                    ResultSet resultSet = preStat.getGeneratedKeys();
                     try {
-                        if (resultSet.next()) {
-                            if (connection != null) {
-                                    connection.close();
-                            }
-                            return true;
-                            
+                        if (resultSet.first()) {
+                            LOG.debug("ID of new create magasin" + resultSet.getInt(1));
+                            result = resultSet.getInt(1);
                         }
-                        return false;
-                    } catch (SQLException exception) {
-                        LOG.warn("Unable to execute query : " + exception.toString());
+                    } catch (Exception e) {
+                        LOG.debug("Exception catch :", e);
                     } finally {
                         resultSet.close();
                     }
-                } catch (SQLException exception) { 
-                    LOG.warn("Unable to execute query : " + exception.toString());
+                } catch (SQLException exception) {
+                    LOG.error("Unable to execute query : " + exception.toString());
                 } finally {
                     preStat.close();
                 }
             } catch (SQLException exception) {
-                LOG.warn("Unable to execute query : " + exception.toString());
+                LOG.error("Unable to execute query : " + exception.toString());
             } finally {
                 try {
                     if (connection != null) {
@@ -149,5 +80,94 @@ public class CommandeDAO implements ICommandeDAO {
         } catch (Exception exception) {
             LOG.error("Failed to connect to database, catched Exception : ", exception);
         }
-    }*/
+        return result;
+    }
+
+    @Override
+    public void update(int newState, int idCommand) {
+
+        final String query = "UPDATE Commande SET idEtat = ? WHERE idCommande = ?";
+        try {
+            Connection connection = this.databaseSpring.connect();
+            try {
+                PreparedStatement preStat = connection.prepareStatement(query);
+
+                preStat.setInt(1, newState);
+                preStat.setInt(2, idCommand);
+                preStat.executeUpdate();
+                connection.commit();
+
+            } catch (SQLException exception) {
+                LOG.warn("Unable to execute query : " + exception.toString());
+
+            } finally {
+                try {
+                    if (connection != null) {
+                        connection.close();
+                    }
+                } catch (SQLException e) {
+                    LOG.warn("Failed to close database connection, caused by exception : ", e.toString());
+                }
+            }
+        } catch (Exception exception) {
+            LOG.error("Failed to connect to database, catched Exception : ", exception);
+        }
+    }
+
+    @Override
+    public List<Commande> read() {
+        List<Commande> response = new ArrayList();
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT `idCommande`,`idMagasin`,`idProduit`,`idEntrepot`,`idEtat` FROM Commande ORDER BY idEtat, IdMagasin;");
+        try {
+            Connection connection = this.databaseSpring.connect();
+            PreparedStatement preStat = connection.prepareStatement(query.toString());
+            preStat.executeQuery();
+        } catch (Exception e) {
+
+        }
+        return response;
+    }
+
+    @Override
+    public void clear() {
+        StringBuilder query = new StringBuilder();
+        query.append("DELETE FROM Commande WHERE 1=1;");
+        try {
+            Connection connection = this.databaseSpring.connect();
+            PreparedStatement preStat = connection.prepareStatement(query.toString());
+            preStat.executeQuery();
+            LOG.debug("CLEAR COMMAND SUCCESSFULL");
+        } catch (SQLException exception) {
+            LOG.error("CLEAR COMMAND FAIL, SQL exception : ", exception);
+        } catch (Exception exception) {
+            LOG.error("CLEAR COMMAND FAIL, exception : ", exception);
+        }
+    }
+
+    @Override
+    public void clearTodayStatus() {
+        StringBuilder query = new StringBuilder();
+        query.append("DELETE FROM Commande WHERE idEtat=4;");
+        try {
+            Connection connection = this.databaseSpring.connect();
+            PreparedStatement preStat = connection.prepareStatement(query.toString());
+            preStat.executeQuery();
+            LOG.debug("CLEAR TODAY COMMAND SUCCESSFULL");
+        } catch (SQLException exception) {
+            LOG.error("CLEAR COMMAND FAIL, SQL exception : ", exception);
+        } catch (Exception exception) {
+            LOG.error("CLEAR COMMAND FAIL, exception : ", exception);
+        }
+    }
+
+    @Override
+    public Commande loadFromCommandResultSet(ResultSet rs) throws SQLException {
+        int idCommande = rs.getInt("idCommande");
+        int idProduit = rs.getInt("idProduit");
+        int idEtat = rs.getInt("idEtat");
+        int idEntrepot = rs.getInt("idEntrepot");
+        int idMagasin = rs.getInt("idMagasin");
+        return factoryCommande.create(idCommande, idProduit, idMagasin, idEntrepot, idEtat);
+    }
 }

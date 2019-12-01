@@ -15,7 +15,7 @@ public class Property {
      * Invariant PROPERTY TYPE String.
      */
     public static final String ENVIRONMENT = "epsi.tma.environment";
-    public static final Double VERSION = 1.0;
+    public static final Double VERSION = 1.1;
     public static final String GROUP_ID = "epsi.tma";
     public static final String NAME = "Command-handler";
 

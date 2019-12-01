@@ -45,6 +45,7 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
         ArrayList<String> sqlList = this.getSQLScript();
         try {
             int i = 0;
+            LOG.debug("IS UP TO DATE : " + this.isDatabaseUptodate());
             if (!this.isDatabaseUptodate()) {
                 for (String sqlUpdate : sqlList) {
                     if (currentDatabaseVersion.getVersion() - 1 < i || currentDatabaseVersion.getVersion() == 0) {

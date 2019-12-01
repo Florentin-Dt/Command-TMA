@@ -5,15 +5,26 @@
  */
 package epsi.tma.dao;
 
+import epsi.tma.entity.Commande;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  *
  * @author florentin
  */
 public interface ICommandeDAO {
-    /**
-     * Function to generate orders
-     * 
-     */
-    public void create(int idProduit, int idMagasin, int idEntrepot, int idEtat);
-    public void updateState(int newState);
+
+    public int create(int idProduit, int idMagasin, int idEntrepot, int idEtat);
+
+    public void update(int newState, int idCommand);
+
+    public List<Commande> read();
+
+    public void clear();
+    
+    public void clearTodayStatus();
+    
+    public Commande loadFromCommandResultSet(ResultSet rs) throws SQLException;
 }

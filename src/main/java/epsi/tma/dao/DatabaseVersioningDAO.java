@@ -101,25 +101,26 @@ public class DatabaseVersioningDAO implements IDatabaseVersioningDAO {
 
     @Override
     public String updateSingleVersion(String SQLString) {
+        String response;
         LOG.info("Starting Execution of '" + SQLString + "'");
         try (Connection connection = this.databaseSpring.connect();
                 Statement preStat = connection.createStatement();) {
             preStat.execute(SQLString);
-            //    LOG.info("'" + SQLString + "' Executed successfully.");
+            LOG.info("'" + SQLString + "' Executed successfully.");
+            response = "OK";
         } catch (Exception exception) {
-            LOG.error(exception.toString(), exception);
-            return exception.toString();
+            LOG.error("Exception during update database version : ", exception);
+            response = "exception : " + exception.toString();
         } finally {
             this.databaseSpring.closeConnection();
         }
-        return "OK";
+        return response;
     }
 
     @Override
     public void updateNumberVersion(Integer version) {
         try (Connection connection = this.databaseSpring.connect();) {
             LOG.info("Try to update database to " + version + " version");
-            System.out.println("updateNumberVersion called, update version to " + version);
             String query = "UPDATE DatabaseVersioning SET `Value` = ? WHERE `Key` = 'DatabaseVersion';";
             PreparedStatement preStat = connection.prepareStatement(query);
             preStat.setInt(1, version);

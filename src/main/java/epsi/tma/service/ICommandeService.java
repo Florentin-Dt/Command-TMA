@@ -13,8 +13,16 @@ import java.util.List;
  * @author florentin
  */
 public interface ICommandeService {
-    
-    public void create(int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat);
-    public void updateState(int newState);
-    public String simulateMagasinCommande();
+
+    public int create(int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat);
+
+    public void update(int newState, int idCommand);
+
+    public List<Commande> read();
+
+    public void clear();
+
+    public void clearTodayStatus();
+
+    public String simulateMagasinCommande(int idProduit, int idMagasin, int idEntrepot);
 }

@@ -6,10 +6,12 @@
 package epsi.tma.servlet;
 
 import epsi.tma.service.ICommandeService;
+import epsi.tma.util.StringUtil;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -24,29 +26,33 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  */
 @Path("/commandeWebService")
 public class CommandeWebService {
-    
+
     private static final Logger LOG = LogManager.getLogger(CommandeWebService.class);
-    
+
     private ICommandeService commandeService;
-    
+
     /*
      * Create orders
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/createOrders")
-    public Response createOrders(@Context ServletContext servletContext) {
-        LOG.info("create orders call");
+    @Path("/simulate")
+    public Response simulate(@Context ServletContext servletContext, @QueryParam("idMagasin") int idMagasin) {
+        LOG.info("SIMULATE MAGASIN COMMAND - WS STACK");
         try {
-            ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-            this.commandeService = appContext.getBean(ICommandeService.class);
-            return Response.ok(commandeService.simulateMagasinCommande()).build();
+            if (idMagasin != 0) {
+                ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+                this.commandeService = appContext.getBean(ICommandeService.class);
+                return Response.ok(commandeService.simulateMagasinCommande(1, idMagasin, 1)).build();
+            }
+         
         } catch (Exception e) {
-         //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
+            //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
             return Response.ok(e).build();
         }
+        return Response.ok("UNSPECIFIED idMagasin TO SIMULATE COMMAND").build();
     }
-    
+
     /*
      * Update orders
      */
@@ -64,6 +70,4 @@ public class CommandeWebService {
 //            return Response.ok(e).build();
 //        }
 //    }
-    
-    
 }
