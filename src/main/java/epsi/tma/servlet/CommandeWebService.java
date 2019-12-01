@@ -24,7 +24,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * @author florentin
  */
-@Path("/command")
+@Path("/order")
 public class CommandeWebService {
 
     private static final Logger LOG = LogManager.getLogger(CommandeWebService.class);
@@ -45,7 +45,7 @@ public class CommandeWebService {
                 this.commandeService = appContext.getBean(ICommandeService.class);
                 return Response.ok(commandeService.simulateMagasinCommande(1, idMagasin, 1)).build();
             }
-         
+
         } catch (Exception e) {
             //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
             return Response.ok(e).build();
@@ -54,20 +54,62 @@ public class CommandeWebService {
     }
 
     /*
-     * Update orders
+     * Update command
      */
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/updateOrders")
-//    public Response updateState(@Context ServletContext servletContext) {
-//        LOG.info("create orders call");
-//        try {
-//            ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-//            this.commandeService = appContext.getBean(ICommandeService.class);
-//            return Response.ok(commandeService.updateOrders()).build();
-//        } catch (Exception e) {
-//         //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
-//            return Response.ok(e).build();
-//        }
-//    }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/update")
+    public Response updateState(@Context ServletContext servletContext, @QueryParam("idCommande") int idCommande, @QueryParam("idEtat") int idEtat) {
+        LOG.info("update command call");
+        if (idEtat != 0 && idCommande != 0) {
+            try {
+                ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+                this.commandeService = appContext.getBean(ICommandeService.class);
+                String response = commandeService.updateCommand(idEtat, idCommande);
+                return Response.ok(response).build();
+            } catch (Exception e) {
+                //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
+                return Response.ok(e).build();
+            }
+        }
+        return Response.ok("Unspecify idCommande or idEtat requested").build();
+    }
+
+    /*
+     * Update command
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/clear")
+    public Response clear(@Context ServletContext servletContext) {
+        LOG.info("CLEAR ALL ORDER");
+        try {
+            ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+            this.commandeService = appContext.getBean(ICommandeService.class);
+            commandeService.clear();
+            return Response.ok("CLEAR").build();
+        } catch (Exception e) {
+            //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
+            return Response.ok(e).build();
+        }
+    }
+
+    /*
+     * Update command
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/cleartoday")
+    public Response clearToday(@Context ServletContext servletContext) {
+        LOG.info("UPDATE ALL ORDER");
+        try {
+            ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+            this.commandeService = appContext.getBean(ICommandeService.class);
+            commandeService.clearTodayStatus();
+            return Response.ok("CLEAR").build();
+        } catch (Exception e) {
+            //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
+            return Response.ok(e).build();
+        }
+    }
 }

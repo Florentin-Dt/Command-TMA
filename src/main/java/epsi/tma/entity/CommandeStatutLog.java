@@ -19,15 +19,20 @@ public class CommandeStatutLog {
     private Timestamp horodatage;
     private String emmeteur;
     private String action;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
 
     public int getIdCommande() {
         return idCommande;
     }
-    
+
     public int getIdLog() {
         return idLog;
     }
-    
+
     public int getIdEtat() {
         return idEtat;
     }
@@ -66,6 +71,10 @@ public class CommandeStatutLog {
 
     public void setIdLog(int statutLog) {
         this.idLog = statutLog;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

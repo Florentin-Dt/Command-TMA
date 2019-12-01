@@ -14,5 +14,5 @@ import java.sql.Timestamp;
  */
 public interface IFactoryCommandeStatutLog {
     
-    public CommandeStatutLog create(int idLog, int idCommande, int idEtat, Timestamp horodatage, String emeteur, String action);
+    public CommandeStatutLog create(int idLog, int idCommande, int idEtat, Timestamp horodatage, String emeteur, String action, String type);
 }

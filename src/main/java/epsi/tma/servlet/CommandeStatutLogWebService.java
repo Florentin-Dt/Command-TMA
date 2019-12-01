@@ -23,7 +23,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * @author cDelage
  */
-@Path("/commandelog")
+@Path("/orderlog")
 public class CommandeStatutLogWebService {
 
     private static final Logger LOG = LogManager.getLogger(MonitorWebService.class);
@@ -38,7 +38,7 @@ public class CommandeStatutLogWebService {
         try {
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             this.commandeStatutLogService = appContext.getBean(ICommandeStatutLogService.class);
-            return Response.ok(commandeStatutLogService.read()).build();
+            return Response.ok(commandeStatutLogService.logParser()).build();
         } catch (Exception e) {
             LOG.error("Catch error during read from commandeStatutLogWebService web service : ", e);
             return Response.ok(e).build();

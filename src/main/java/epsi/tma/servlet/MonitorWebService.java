@@ -6,7 +6,6 @@
 package epsi.tma.servlet;
 
 import epsi.tma.service.IDatabaseVersioningService;
-import java.sql.Timestamp;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

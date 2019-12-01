@@ -18,7 +18,7 @@ public interface ICommandeDAO {
 
     public int create(int idProduit, int idMagasin, int idEntrepot, int idEtat);
 
-    public void update(int newState, int idCommand);
+    public String update(int newState, int idCommand);
 
     public List<Commande> read();
 

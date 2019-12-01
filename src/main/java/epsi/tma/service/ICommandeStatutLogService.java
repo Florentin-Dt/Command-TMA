@@ -5,7 +5,9 @@
  */
 package epsi.tma.service;
 
+import epsi.tma.entity.CommandeStatutLog;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +16,9 @@ import java.util.Map;
  */
 public interface ICommandeStatutLogService {
     
-    public Map<String, Object> read();
+    public List<CommandeStatutLog> read();
     
-    public String create(String emmeteur, String action, int idCommande, Timestamp horodatage, int idProduit, int idEtat);
+    public List<String> logParser();
+    
+    public String create(String emmeteur, String action, int idCommande, Timestamp horodatage, int idProduit, int idEtat, String type);
 }

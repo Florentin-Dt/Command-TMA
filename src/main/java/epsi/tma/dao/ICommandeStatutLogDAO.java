@@ -9,6 +9,7 @@ import epsi.tma.entity.CommandeStatutLog;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,9 +17,11 @@ import java.util.Map;
  * @author utilisateur
  */
 public interface ICommandeStatutLogDAO {
-    
-    public Map<String,Object> read();
+
+    public List<CommandeStatutLog> read();
+
     public CommandeStatutLog loadCommandSttLogFromResultSet(ResultSet rs) throws SQLException;
-    public String create(String emmeteur, String action, int idCommande, Timestamp horodatage, int idProduit, int idEtat);
-    
+
+    public String create(String emmeteur, String action, int idCommande, Timestamp horodatage, int idProduit, int idEtat, String type);
+
 }

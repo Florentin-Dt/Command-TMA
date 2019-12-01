@@ -3,37 +3,38 @@
 All path is preceded by context, context corresponding to :
 - 1 : device path
 - 2 : path you give in tomcat-deployment 
+- 3 : web service general path /api/
 
-My local example : localhost:8080/tma
+My local example : localhost:8080/tma/api
 
 ## Command
 
 ws src path :
 
-	/command
+	/order
 
 simulate function path :
-	/command/simulate?idMagasin=1
+	/order/simulate?idMagasin=1
 
 Path parameter take idMagasin id to simulate it's new command
 
 update function path : 
 
-	/command/update?idCommande=1,idEtat=1	
+	/order/update?idCommande=1,idEtat=1	
 
 Development in progress,
 Parameter idCommande take id of command updated
 Parameter idEtat take id of target state update
 
-clear all command : 
+clear all order : 
 
-	/command/clear
+	/order/clear
 
 Development in progress
 
 clear all 4 status command : 
 
-	/command/cleartoday
+	/order/cleartoday
 
 Development in progres
 
@@ -41,11 +42,11 @@ Development in progres
 
 ws src path : 
 	
-	/commandlog
+	/orderlog
 
 log reader function : 
 
-	/commandlog/read
+	/orderlog/read
 
 ## Monitor
 

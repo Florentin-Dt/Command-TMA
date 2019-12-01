@@ -27,9 +27,60 @@ public class CommandeService implements ICommandeService {
 
     @Autowired
     ICommandeDAO commandeDAO;
-    
+
     @Autowired
     ICommandeStatutLogService commandeStatutLogService;
+
+    /*
+     * simulate command from magasin
+     * @param idProduit
+     * @param idMagasin
+     * @param idEntrepot
+     * @param idEtat
+     */
+    @Override
+    public String simulateMagasinCommande(int idProduit, int idMagasin, int idEntrepot) {
+        String response = new String();
+
+        try {
+            for (int i = 0; i < 10; i++) {
+                int idCommande = create(idProduit, idMagasin, idEntrepot, 1);
+                LOG.debug("SIMULATE magasin command : {}  - for product : {}", idMagasin, idProduit);
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                String action = " create order " + idCommande;
+                commandeStatutLogService.create(MagasinEnum.getMagasinName(idMagasin), action, idCommande, timestamp, idProduit, 1, "CREATE");
+            }
+
+            response = "SIMULATE SUCCESSFULLY";
+        } catch (Exception exception) {
+            LOG.debug("CATCH EXCEPTION DURING SIMULATE MAGASIN COMMANDE :", exception);
+            response = "ERROR DURING SIMULATE MAGASIN COMMANDE";
+        }
+        return response;
+    }
+
+    @Override
+    public String updateCommand(int newState, int idCommande) {
+        String response = new String();
+        try {
+            response = update(newState, idCommande);
+            if (response.compareTo("UPDATE SUCCESSFULLY") == 0) {
+                LOG.debug("UPDATE {} order to {} status : {} ", idCommande, newState, response);
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                String action = "update " + idCommande + " order";
+                LOG.debug("TRY TO LOG ACTION : {}", action);
+                commandeStatutLogService.create("ENTREPOT 1", action, idCommande, timestamp, 1, newState, "UPDATE");
+            } else {
+                String action = "fail to update " + idCommande + " order";
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                commandeStatutLogService.create("ENTREPOT 1", action, idCommande, timestamp, 1, newState, "ERROR");
+            }
+        } catch (Exception exception) {
+            response = exception.getLocalizedMessage();
+        }
+
+        return response;
+    }
 
     @Override
     public int create(int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat) {
@@ -37,35 +88,8 @@ public class CommandeService implements ICommandeService {
     }
 
     @Override
-    public void update(int newState, int idCommand) {
-        commandeDAO.update(newState, idCommand);
-    }
-
-    /*
-    * simulate command from magasin
-    * @param idProduit
-    * @param idMagasin
-    * @param idEntrepot
-    * @param idEtat
-    */
-    @Override
-    public String simulateMagasinCommande(int idProduit, int idMagasin, int idEntrepot) {
-        String response = new String();
-
-        try{
-        for (int i = 0; i < 10; i++) {
-            int idCommande = create(idProduit, idMagasin, idEntrepot, 1);
-            LOG.debug("SIMULATE magasin command : {}  - for product : {}",idMagasin,idProduit);
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            commandeStatutLogService.create(MagasinEnum.getMagasinName(idMagasin), ActionEnum.getActionLibelle(1),idCommande ,timestamp ,idProduit, 1);
-        }
-
-        response = "SIMULATE SUCCESSFULLY";
-        }catch (Exception exception){
-        LOG.debug("CATCH EXCEPTION DURING SIMULATE MAGASIN COMMANDE :", exception);
-        response = "ERROR DURING SIMULATE MAGASIN COMMANDE";
-        }
-        return response;
+    public String update(int newState, int idCommand) {
+        return commandeDAO.update(newState, idCommand);
     }
 
     @Override
@@ -76,10 +100,15 @@ public class CommandeService implements ICommandeService {
     @Override
     public void clear() {
         commandeDAO.clear();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        commandeStatutLogService.create("ADMIN", "Clear all order", 0, timestamp, 0, 0, "DELETE");
     }
 
     @Override
     public void clearTodayStatus() {
         commandeDAO.clearTodayStatus();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        commandeStatutLogService.create("ADMIN", "Clear status 4 order", 0, timestamp, 0, 0, "DELETE");
+
     }
 }

@@ -16,7 +16,9 @@ public interface ICommandeService {
 
     public int create(int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat);
 
-    public void update(int newState, int idCommand);
+    public String update(int newState, int idCommand);
+    
+    public String updateCommand(int newState, int idCommand);
 
     public List<Commande> read();
 

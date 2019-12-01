@@ -84,8 +84,8 @@ public class CommandeDAO implements ICommandeDAO {
     }
 
     @Override
-    public void update(int newState, int idCommand) {
-
+    public String update(int newState, int idCommand) {
+        String response = "UPDATE SUCCESSFULLY";
         final String query = "UPDATE Commande SET idEtat = ? WHERE idCommande = ?";
         try {
             Connection connection = this.databaseSpring.connect();
@@ -94,10 +94,12 @@ public class CommandeDAO implements ICommandeDAO {
 
                 preStat.setInt(1, newState);
                 preStat.setInt(2, idCommand);
-                preStat.executeUpdate();
-                connection.commit();
-
+                int updatedrow = preStat.executeUpdate();
+                if(updatedrow == 0){
+                    response = ("0 row updated, idCommande or idEtat don't exist");
+                }
             } catch (SQLException exception) {
+                response = "SQL EXCEPTION DURING QUERY EXECUTING";
                 LOG.warn("Unable to execute query : " + exception.toString());
 
             } finally {
@@ -112,6 +114,7 @@ public class CommandeDAO implements ICommandeDAO {
         } catch (Exception exception) {
             LOG.error("Failed to connect to database, catched Exception : ", exception);
         }
+        return response;
     }
 
     @Override
@@ -136,7 +139,7 @@ public class CommandeDAO implements ICommandeDAO {
         try {
             Connection connection = this.databaseSpring.connect();
             PreparedStatement preStat = connection.prepareStatement(query.toString());
-            preStat.executeQuery();
+            preStat.execute();
             LOG.debug("CLEAR COMMAND SUCCESSFULL");
         } catch (SQLException exception) {
             LOG.error("CLEAR COMMAND FAIL, SQL exception : ", exception);
@@ -152,7 +155,7 @@ public class CommandeDAO implements ICommandeDAO {
         try {
             Connection connection = this.databaseSpring.connect();
             PreparedStatement preStat = connection.prepareStatement(query.toString());
-            preStat.executeQuery();
+            preStat.execute();
             LOG.debug("CLEAR TODAY COMMAND SUCCESSFULL");
         } catch (SQLException exception) {
             LOG.error("CLEAR COMMAND FAIL, SQL exception : ", exception);

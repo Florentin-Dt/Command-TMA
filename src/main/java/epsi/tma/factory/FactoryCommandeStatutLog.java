@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class FactoryCommandeStatutLog implements IFactoryCommandeStatutLog {
 
     @Override
-    public CommandeStatutLog create(int idLog, int idCommande, int idEtat, Timestamp horodatage, String emeteur, String action) {
+    public CommandeStatutLog create(int idLog, int idCommande, int idEtat, Timestamp horodatage, String emeteur, String action, String type) {
 
         CommandeStatutLog commandeStatutLog = new CommandeStatutLog();
         commandeStatutLog.setIdCommande(idCommande);
@@ -26,6 +26,7 @@ public class FactoryCommandeStatutLog implements IFactoryCommandeStatutLog {
         commandeStatutLog.setHorodatage(horodatage);
         commandeStatutLog.setEmmeteur(emeteur);
         commandeStatutLog.setAction(action);
+        commandeStatutLog.setType(type);
         return commandeStatutLog;
     }
 }
