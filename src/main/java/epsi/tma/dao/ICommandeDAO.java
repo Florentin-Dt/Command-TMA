@@ -19,12 +19,17 @@ public interface ICommandeDAO {
     public int create(int idProduit, int idMagasin, int idEntrepot, int idEtat);
 
     public String update(int newState, int idCommand);
+    
+    public String updateAll(int oldState, int newState);
 
     public List<Commande> read();
+    
+    public List<Commande> readByStatus(int status);
 
     public void clear();
     
     public void clearTodayStatus();
     
     public Commande loadFromCommandResultSet(ResultSet rs) throws SQLException;
+    
 }

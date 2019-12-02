@@ -116,6 +116,40 @@ public class CommandeDAO implements ICommandeDAO {
         }
         return response;
     }
+    
+    @Override
+    public String updateAll(int oldState, int newState) {
+        String response = "UPDATE SUCCESSFULLY";
+        final String query = "UPDATE Commande SET idEtat = ? WHERE idEtat = ?";
+        try {
+            Connection connection = this.databaseSpring.connect();
+            try {
+                PreparedStatement preStat = connection.prepareStatement(query);
+
+                preStat.setInt(1, newState);
+                preStat.setInt(2, oldState);
+                int updatedrow = preStat.executeUpdate();
+                if(updatedrow == 0){
+                    response = ("0 row updated, idEtat don't exist or no line needs update");
+                }
+            } catch (SQLException exception) {
+                response = "SQL EXCEPTION DURING QUERY EXECUTING";
+                LOG.warn("Unable to execute query : " + exception.toString());
+
+            } finally {
+                try {
+                    if (connection != null) {
+                        connection.close();
+                    }
+                } catch (SQLException e) {
+                    LOG.warn("Failed to close database connection, caused by exception : ", e.toString());
+                }
+            }
+        } catch (Exception exception) {
+            LOG.error("Failed to connect to database, catched Exception : ", exception);
+        }
+        return response;
+    }
 
     @Override
     public List<Commande> read() {
@@ -129,6 +163,31 @@ public class CommandeDAO implements ICommandeDAO {
         } catch (Exception e) {
 
         }
+        return response;
+    }
+    
+    @Override
+    public List<Commande> readByStatus(int status) {
+        List<Commande> response = new ArrayList();
+        StringBuilder query = new StringBuilder();
+        
+        query.append("SELECT `idCommande`,`idMagasin`,`idProduit`,`idEntrepot`,`idEtat` FROM Commande WHERE idEtat = ? ORDER BY IdMagasin;");
+        try {
+            Connection connection = this.databaseSpring.connect();
+            PreparedStatement preStat = connection.prepareStatement(query.toString());
+            preStat.setInt(1, status);
+            ResultSet rs = preStat.executeQuery();
+            try{
+                while (rs.next()){
+                    response.add(loadFromCommandResultSet(rs));
+                }
+            } catch (SQLException e) {
+                
+            }
+        } catch (Exception e) {
+
+        }
+        
         return response;
     }
 
