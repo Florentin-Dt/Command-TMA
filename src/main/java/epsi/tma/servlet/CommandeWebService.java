@@ -112,4 +112,24 @@ public class CommandeWebService {
             return Response.ok(e).build();
         }
     }
+    
+     /*
+     * read orders
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/read")
+    public Response read(@Context ServletContext servletContext) {
+        LOG.info("READ MAGASIN COMMAND - WS STACK");
+        try {     
+                ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+                this.commandeService = appContext.getBean(ICommandeService.class);
+                return Response.ok(commandeService.readFormater()).build();
+
+        } catch (Exception e) {
+            LOG.error("Catch error durring read order in commande web service", e);
+            return Response.ok(e).build();
+        }
+    }
+
 }

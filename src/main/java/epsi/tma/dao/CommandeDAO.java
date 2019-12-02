@@ -95,7 +95,7 @@ public class CommandeDAO implements ICommandeDAO {
                 preStat.setInt(1, newState);
                 preStat.setInt(2, idCommand);
                 int updatedrow = preStat.executeUpdate();
-                if(updatedrow == 0){
+                if (updatedrow == 0) {
                     response = ("0 row updated, idCommande or idEtat don't exist");
                 }
             } catch (SQLException exception) {
@@ -119,16 +119,25 @@ public class CommandeDAO implements ICommandeDAO {
 
     @Override
     public List<Commande> read() {
+        LOG.debug("READ - COMMANDE DAO");
         List<Commande> response = new ArrayList();
         StringBuilder query = new StringBuilder();
         query.append("SELECT `idCommande`,`idMagasin`,`idProduit`,`idEntrepot`,`idEtat` FROM Commande ORDER BY idEtat, IdMagasin;");
         try {
             Connection connection = this.databaseSpring.connect();
             PreparedStatement preStat = connection.prepareStatement(query.toString());
-            preStat.executeQuery();
+            ResultSet resultSet = preStat.executeQuery();
+            while (resultSet.next()) {
+                response.add(this.loadFromCommandResultSet(resultSet));
+            }
         } catch (Exception e) {
-
+            LOG.debug("READ - COMMANDE DAO exception catch : ", e);
         }
+        LOG.debug("READ LIST COMMAND : {} ", response.toString());
+        for (Commande response1 : response) {
+            LOG.debug("READ COMMAND NUMBER {}",response1.getIdCommande());
+        }
+     
         return response;
     }
 
@@ -170,7 +179,7 @@ public class CommandeDAO implements ICommandeDAO {
         int idProduit = rs.getInt("idProduit");
         int idEtat = rs.getInt("idEtat");
         int idEntrepot = rs.getInt("idEntrepot");
-        int idMagasin = rs.getInt("idMagasin");
+        int idMagasin = rs.getInt("idMagasin");     
         return factoryCommande.create(idCommande, idProduit, idMagasin, idEntrepot, idEtat);
     }
 }

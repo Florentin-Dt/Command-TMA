@@ -7,6 +7,7 @@ package epsi.tma.service;
 
 import epsi.tma.entity.Commande;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -27,4 +28,6 @@ public interface ICommandeService {
     public void clearTodayStatus();
 
     public String simulateMagasinCommande(int idProduit, int idMagasin, int idEntrepot);
+    
+    public List<Map<String, Object>> readFormater();
 }

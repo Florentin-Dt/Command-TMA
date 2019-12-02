@@ -8,9 +8,15 @@ package epsi.tma.service;
 import epsi.tma.dao.ICommandeDAO;
 import epsi.tma.entity.Commande;
 import epsi.tma.enumClass.ActionEnum;
+import epsi.tma.enumClass.EntrepotEnum;
 import epsi.tma.enumClass.MagasinEnum;
+import epsi.tma.enumClass.ProduitEnum;
+import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +85,22 @@ public class CommandeService implements ICommandeService {
             response = exception.getLocalizedMessage();
         }
 
+        return response;
+    }
+
+    @Override
+    public List<Map<String, Object>> readFormater() {
+        List<Commande> result = read();
+        List<Map<String, Object>> response = new ArrayList();
+        for (Commande i : result) {
+            Map<String, Object> resp = new HashMap();
+            resp.put("MAGASIN", MagasinEnum.getMagasinName(i.getIdMagasin()));
+            resp.put("PRODUIT", ProduitEnum.getProduitName(i.getIdProduit()));
+            resp.put("ENTREPOT", EntrepotEnum.getEntrepotName(i.getIdProduit()));
+            resp.put("IDETAT", i.getIdEtat());
+            resp.put("IDCOMMANDE", i.getIdCommande());
+            response.add(resp);
+        }
         return response;
     }
 
