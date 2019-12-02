@@ -15,44 +15,46 @@ public class Commande {
     private int idMagasin;
     private int idEntrepot;
     private int idEtat;
-    
-    public int getIdCommande(){
-        return this.idCommande;
+
+    public int getIdCommande() {
+        return idCommande;
     }
-    
-    public int getIdProduit(){
-        return this.idProduit;
+
+    public void setIdCommande(int idCommande) {
+        this.idCommande = idCommande;
     }
-    
-    public int getIdMagasin(){
-        return this.idMagasin;
+
+    public int getIdProduit() {
+        return idProduit;
     }
-    
-    public int getIdEntrepot(){
-        return this.idEntrepot;
+
+    public void setIdProduit(int idProduit) {
+        this.idProduit = idProduit;
     }
-    
-    public int getIdEtat(){
-        return this.idEtat;
+
+    public int getIdMagasin() {
+        return idMagasin;
     }
-    
-    public void setIdCommande(int pIdCommande){
-        this.idCommande = pIdCommande;
+
+    public void setIdMagasin(int idMagasin) {
+        this.idMagasin = idMagasin;
     }
-    
-    public void setIdProduit(int pIdProduit){
-        this.idCommande = pIdProduit;
+
+    public int getIdEntrepot() {
+        return idEntrepot;
     }
-    
-    public void setIdMagasin(int pIdMagasin){
-        this.idCommande = pIdMagasin;
+
+    public void setIdEntrepot(int idEntrepot) {
+        this.idEntrepot = idEntrepot;
     }
-    
-    public void setIdEntrepot(int pIdEntrepot){
-        this.idCommande = pIdEntrepot;
+
+    public int getIdEtat() {
+        return idEtat;
     }
-    
-    public void setIdEtat(int pIdEtat){
-        this.idEtat = pIdEtat;
+
+    public void setIdEtat(int idEtat) {
+        this.idEtat = idEtat;
     }
+
+
 }

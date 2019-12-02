@@ -6,6 +6,8 @@
 package epsi.tma.servlet;
 
 import epsi.tma.service.ICommandeStatutLogService;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -38,7 +40,9 @@ public class CommandeStatutLogWebService {
         try {
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             this.commandeStatutLogService = appContext.getBean(ICommandeStatutLogService.class);
-            return Response.ok(commandeStatutLogService.logParser()).build();
+            Map<String,Object> response = new HashMap();
+            response.put("LOGS", commandeStatutLogService.logParser());
+            return Response.ok(response).build();
         } catch (Exception e) {
             LOG.error("Catch error during read from commandeStatutLogWebService web service : ", e);
             return Response.ok(e).build();

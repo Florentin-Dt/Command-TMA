@@ -22,31 +22,31 @@ public class CommandeStatutLog {
     private String type;
 
     public String getType() {
-        return type;
+        return this.type;
     }
 
     public int getIdCommande() {
-        return idCommande;
+        return this.idCommande;
     }
 
     public int getIdLog() {
-        return idLog;
+        return this.idLog;
     }
 
     public int getIdEtat() {
-        return idEtat;
+        return this.idEtat;
     }
 
     public Timestamp getHorodatage() {
-        return horodatage;
+        return this.horodatage;
     }
 
     public String getEmmeteur() {
-        return emmeteur;
+        return this.emmeteur;
     }
 
     public String getAction() {
-        return action;
+        return this.action;
     }
 
     public void setIdCommande(int idCommande) {
