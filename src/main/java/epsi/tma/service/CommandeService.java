@@ -87,6 +87,40 @@ public class CommandeService implements ICommandeService {
 
         return response;
     }
+    
+    @Override
+    public String updateAllCommand(int oldState, int newState) {
+        String response = new String();
+        List<Commande> commandes = new ArrayList();
+        
+        try {
+            commandes = commandeDAO.readByStatus(oldState);
+            try {
+                response = updateAll(oldState, newState);
+                if (response.compareTo("UPDATE SUCCESSFULLY") == 0) {
+                    LOG.debug("UPDATE order status {} to {} status : {} ", oldState, newState, response);
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    String action = "update " + oldState + " order";
+                    LOG.debug("TRY TO LOG ACTION : {}", action);
+                    for (Commande cmd : commandes){
+                        commandeStatutLogService.create("ENTREPOT 1", action, cmd.getIdCommande(), timestamp, 1, newState, "UPDATE");
+                    }
+                } else {
+                    String action = "fail to update order with "+ oldState +"status to "+ newState;
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    for (Commande cmd : commandes){
+                        commandeStatutLogService.create("ENTREPOT 1", action, cmd.getIdCommande(), timestamp, 1, newState, "ERROR");
+                    }
+                }
+            } catch (Exception e) {
+                response = e.getLocalizedMessage();
+            }
+        } catch (Exception e){
+
+        }
+
+        return response;
+    }
 
     @Override
     public List<Map<String, Object>> readFormater() {
@@ -112,6 +146,11 @@ public class CommandeService implements ICommandeService {
     @Override
     public String update(int newState, int idCommand) {
         return commandeDAO.update(newState, idCommand);
+    }
+    
+    @Override
+    public String updateAll(int oldState, int newState) {
+        return commandeDAO.updateAll(oldState, newState);
     }
 
     @Override

@@ -19,7 +19,11 @@ public interface ICommandeService {
 
     public String update(int newState, int idCommand);
     
+    public String updateAll(int oldState, int newState);
+    
     public String updateCommand(int newState, int idCommand);
+    
+    public String updateAllCommand(int oldState, int newState);
 
     public List<Commande> read();
 

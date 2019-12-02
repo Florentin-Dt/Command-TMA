@@ -74,6 +74,29 @@ public class CommandeWebService {
         }
         return Response.ok("Unspecify idCommande or idEtat requested").build();
     }
+    
+    /*
+    * Update all orders from current status to a new status 
+    */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/updateAll")
+    public Response updateAllState(@Context ServletContext servletContext, @QueryParam("oldState") int oldState, @QueryParam("newState") int newState){
+        LOG.info("updateAllState command call");
+        if (oldState != 0 && newState != 0) {
+            try {
+                ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+                this.commandeService = appContext.getBean(ICommandeService.class);
+                String response = commandeService.updateAllCommand(oldState, newState);
+             
+                return Response.ok(response).build();
+            } catch (Exception e) {
+                //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
+                return Response.ok(e).build();
+            }
+        }
+        return Response.ok("Unspecify old state or new state requested").build();
+    }
 
     /*
      * Update command
