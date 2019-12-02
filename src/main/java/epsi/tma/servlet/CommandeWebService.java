@@ -54,7 +54,7 @@ public class CommandeWebService {
     }
 
     /*
-     * Update command
+     * Update order
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -99,7 +99,7 @@ public class CommandeWebService {
     }
 
     /*
-     * Update command
+     * Delete all orders
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -118,7 +118,7 @@ public class CommandeWebService {
     }
 
     /*
-     * Update command
+     * Delete orders with the final state
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -137,7 +137,7 @@ public class CommandeWebService {
     }
     
      /*
-     * read orders
+     * Read orders
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
