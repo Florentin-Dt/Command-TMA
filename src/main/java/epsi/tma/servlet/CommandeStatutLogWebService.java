@@ -40,9 +40,13 @@ public class CommandeStatutLogWebService {
         try {
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             this.commandeStatutLogService = appContext.getBean(ICommandeStatutLogService.class);
-            Map<String,Object> response = new HashMap();
+            Map<String, Object> response = new HashMap();
             response.put("LOGS", commandeStatutLogService.logParser());
-            return Response.ok(response).build();
+            return Response.ok(response).status(200)
+                    .header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         } catch (Exception e) {
             LOG.error("Catch error during read from commandeStatutLogWebService web service : ", e);
             return Response.ok(e).build();
