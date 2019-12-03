@@ -114,10 +114,10 @@ public class DatabaseVersioningService implements IDatabaseVersioningService {
     public Map<String, Object> readGenericInformation() {
         Map<String, Object> map = this.readDatabaseInformation();
         try {
-            map.put("Project version", Property.VERSION);
-            map.put("Project name", Property.NAME);
-            map.put("Project group_id", Property.GROUP_ID);
-
+            map.put("Project_version", Property.VERSION);
+            map.put("Project_name", Property.NAME);
+            map.put("Project_group_id", Property.GROUP_ID);
+            map.put("Target_DB", this.getSQLScript().size());
         } catch (Exception e) {
             LOG.error("Failed to read mvn information, catch exception : ", e);
         }

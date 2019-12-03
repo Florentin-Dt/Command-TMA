@@ -49,7 +49,10 @@ public class CommandeStatutLogWebService {
                     .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         } catch (Exception e) {
             LOG.error("Catch error during read from commandeStatutLogWebService web service : ", e);
-            return Response.ok(e).build();
+            return Response.ok(e).header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         }
     }
 }

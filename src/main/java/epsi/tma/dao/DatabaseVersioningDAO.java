@@ -140,7 +140,7 @@ public class DatabaseVersioningDAO implements IDatabaseVersioningDAO {
             response.put("DatabaseProductVersion", metaData.getDatabaseProductVersion());
             response.put("DatabaseMajorVersion", Integer.toString(metaData.getDatabaseMajorVersion()));
             response.put("DatabaseMinorVersion", Integer.toString(metaData.getDatabaseMinorVersion()));
-            response.put("DatabaseVersioningService - version", this.findMyVersionByKey("DatabaseVersion"));
+            response.put("DatabaseVersioningService_version", this.findMyVersionByKey("DatabaseVersion"));
 
             response.put("DriverName", metaData.getDriverName());
             response.put("DriverVersion", metaData.getDriverVersion());

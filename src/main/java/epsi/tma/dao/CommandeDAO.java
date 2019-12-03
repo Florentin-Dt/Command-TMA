@@ -116,7 +116,7 @@ public class CommandeDAO implements ICommandeDAO {
         }
         return response;
     }
-    
+
     @Override
     public String updateAll(int oldState, int newState) {
         String response = "UPDATE SUCCESSFULLY";
@@ -129,7 +129,7 @@ public class CommandeDAO implements ICommandeDAO {
                 preStat.setInt(1, newState);
                 preStat.setInt(2, oldState);
                 int updatedrow = preStat.executeUpdate();
-                if(updatedrow == 0){
+                if (updatedrow == 0) {
                     response = ("0 row updated, idEtat don't exist or no line needs update");
                 }
             } catch (SQLException exception) {
@@ -169,34 +169,34 @@ public class CommandeDAO implements ICommandeDAO {
         }
         LOG.debug("READ LIST COMMAND : {} ", response.toString());
         for (Commande response1 : response) {
-            LOG.debug("READ COMMAND NUMBER {}",response1.getIdCommande());
+            LOG.debug("READ COMMAND NUMBER {}", response1.getIdCommande());
         }
-     
+
         return response;
     }
-    
+
     @Override
     public List<Commande> readByStatus(int status) {
         List<Commande> response = new ArrayList();
         StringBuilder query = new StringBuilder();
-        
+        LOG.debug("READ COMMAND FOR STATUS {}", status);
         query.append("SELECT `idCommande`,`idMagasin`,`idProduit`,`idEntrepot`,`idEtat` FROM Commande WHERE idEtat = ? ORDER BY IdMagasin;");
         try {
             Connection connection = this.databaseSpring.connect();
             PreparedStatement preStat = connection.prepareStatement(query.toString());
             preStat.setInt(1, status);
             ResultSet rs = preStat.executeQuery();
-            try{
-                while (rs.next()){
-                    response.add(loadFromCommandResultSet(rs));
-                }
-            } catch (SQLException e) {
-                
+
+            while (rs.next()) {
+                response.add(loadFromCommandResultSet(rs));
             }
+        } catch (SQLException e) {
+            LOG.error("CATCH SQL EXCEPTION DURING EXECUTION :", e);
         } catch (Exception e) {
+            LOG.error("CATCH EXCEPTION DURING EXECUTION :", e);
 
         }
-        
+
         return response;
     }
 
@@ -238,7 +238,7 @@ public class CommandeDAO implements ICommandeDAO {
         int idProduit = rs.getInt("idProduit");
         int idEtat = rs.getInt("idEtat");
         int idEntrepot = rs.getInt("idEntrepot");
-        int idMagasin = rs.getInt("idMagasin");     
+        int idMagasin = rs.getInt("idMagasin");
         return factoryCommande.create(idCommande, idProduit, idMagasin, idEntrepot, idEtat);
     }
 }

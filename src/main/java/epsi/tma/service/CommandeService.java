@@ -137,6 +137,22 @@ public class CommandeService implements ICommandeService {
         }
         return response;
     }
+    
+    @Override
+    public List<Map<String, Object>> readStatusFormater(int status) {
+        List<Commande> result = readByStatus(status);
+        List<Map<String, Object>> response = new ArrayList();
+        for (Commande i : result) {
+            Map<String, Object> resp = new HashMap();
+            resp.put("MAGASIN", MagasinEnum.getMagasinName(i.getIdMagasin()));
+            resp.put("PRODUIT", ProduitEnum.getProduitName(i.getIdProduit()));
+            resp.put("ENTREPOT", EntrepotEnum.getEntrepotName(i.getIdProduit()));
+            resp.put("IDETAT", i.getIdEtat());
+            resp.put("IDCOMMANDE", i.getIdCommande());
+            response.add(resp);
+        }
+        return response;
+    }
 
     @Override
     public int create(int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat) {
@@ -171,5 +187,10 @@ public class CommandeService implements ICommandeService {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         commandeStatutLogService.create("ADMIN", "Clear status 4 order", 0, timestamp, 0, 0, "DELETE");
 
+    }
+    
+    @Override
+    public List<Commande> readByStatus(int status){
+        return commandeDAO.readByStatus(status);
     }
 }

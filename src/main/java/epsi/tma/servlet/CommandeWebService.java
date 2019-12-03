@@ -43,14 +43,21 @@ public class CommandeWebService {
             if (idMagasin != 0) {
                 ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
                 this.commandeService = appContext.getBean(ICommandeService.class);
-                return Response.ok(commandeService.simulateMagasinCommande(1, idMagasin, 1)).build();
+                return Response.ok(commandeService.simulateMagasinCommande(1, idMagasin, 1)).status(200)
+                        .header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
             }
 
         } catch (Exception e) {
             //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
             return Response.ok(e).build();
         }
-        return Response.ok("UNSPECIFIED idMagasin TO SIMULATE COMMAND").build();
+        return Response.ok("UNSPECIFIED idMagasin TO SIMULATE COMMAND").header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
     }
 
     /*
@@ -66,36 +73,54 @@ public class CommandeWebService {
                 ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
                 this.commandeService = appContext.getBean(ICommandeService.class);
                 String response = commandeService.updateCommand(idEtat, idCommande);
-                return Response.ok(response).build();
+                return Response.ok(response).header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
             } catch (Exception e) {
                 //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
-                return Response.ok(e).build();
+                return Response.ok(e).header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
             }
         }
-        return Response.ok("Unspecify idCommande or idEtat requested").build();
+        return Response.ok("Unspecify idCommande or idEtat requested").header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
     }
-    
+
     /*
-    * Update all orders from current status to a new status 
-    */
+     * Update all orders from current status to a new status 
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/updateAll")
-    public Response updateAllState(@Context ServletContext servletContext, @QueryParam("oldState") int oldState, @QueryParam("newState") int newState){
+    public Response updateAllState(@Context ServletContext servletContext, @QueryParam("oldState") int oldState, @QueryParam("newState") int newState) {
         LOG.info("updateAllState command call");
         if (oldState != 0 && newState != 0) {
             try {
                 ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
                 this.commandeService = appContext.getBean(ICommandeService.class);
                 String response = commandeService.updateAllCommand(oldState, newState);
-             
-                return Response.ok(response).build();
+
+                return Response.ok(response).header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
             } catch (Exception e) {
                 //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
-                return Response.ok(e).build();
+                return Response.ok(e).header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
             }
         }
-        return Response.ok("Unspecify old state or new state requested").build();
+        return Response.ok("Unspecify old state or new state requested").header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
     }
 
     /*
@@ -110,10 +135,16 @@ public class CommandeWebService {
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             this.commandeService = appContext.getBean(ICommandeService.class);
             commandeService.clear();
-            return Response.ok("CLEAR").build();
+            return Response.ok("CLEAR").header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         } catch (Exception e) {
             //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
-            return Response.ok(e).build();
+            return Response.ok(e).header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         }
     }
 
@@ -129,14 +160,20 @@ public class CommandeWebService {
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             this.commandeService = appContext.getBean(ICommandeService.class);
             commandeService.clearTodayStatus();
-            return Response.ok("CLEAR").build();
+            return Response.ok("CLEAR").header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         } catch (Exception e) {
             //   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
-            return Response.ok(e).build();
+            return Response.ok(e).header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         }
     }
-    
-     /*
+
+    /*
      * read orders
      */
     @GET
@@ -144,15 +181,52 @@ public class CommandeWebService {
     @Path("/read")
     public Response read(@Context ServletContext servletContext) {
         LOG.info("READ MAGASIN COMMAND - WS STACK");
-        try {     
-                ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-                this.commandeService = appContext.getBean(ICommandeService.class);
-                return Response.ok(commandeService.readFormater()).build();
+        try {
+            ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+            this.commandeService = appContext.getBean(ICommandeService.class);
+            return Response.ok(commandeService.readFormater()).header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
 
         } catch (Exception e) {
             LOG.error("Catch error durring read order in commande web service", e);
-            return Response.ok(e).build();
+            return Response.ok(e).header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         }
     }
 
+    /*
+     * read orders
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/readbystatus")
+    public Response readByStatus(@Context ServletContext servletContext, @QueryParam("status") int status) {
+        LOG.info("READ MAGASIN COMMAND - WS STACK");
+        if (status != 0) {
+            try {
+                ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+                this.commandeService = appContext.getBean(ICommandeService.class);
+                return Response.ok(commandeService.readStatusFormater(status)).header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
+
+            } catch (Exception e) {
+                LOG.error("Catch error durring read order in commande web service", e);
+                return Response.ok(e).header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
+            }
+            
+        }
+        return Response.ok("INVALID STATUS NAME").header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
+    }
 }

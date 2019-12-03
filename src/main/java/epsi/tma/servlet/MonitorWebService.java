@@ -45,10 +45,16 @@ public class MonitorWebService {
             LOG.info("UPDATE DATABASE VERSION - MONITOR WEBSERVICE");
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             this.databaseVersioningService = appContext.getBean(IDatabaseVersioningService.class);
-            return Response.ok(databaseVersioningService.updateDatabaseVersion()).build();
+            return Response.ok(databaseVersioningService.updateDatabaseVersion()).header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         } catch (Exception e) {
             LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
-            return Response.ok(e).build();
+            return Response.ok(e).header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         }
     }
 
@@ -63,10 +69,16 @@ public class MonitorWebService {
             LOG.debug("READ APPLICATION INFORMATION - MONITOR WEBSERVICE");
             ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             this.databaseVersioningService = appContext.getBean(IDatabaseVersioningService.class);
-            return Response.ok(databaseVersioningService.readGenericInformation()).build();
+            return Response.ok(databaseVersioningService.readGenericInformation()).header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         } catch (Exception e) {
          //ss   LOG.error("Catch error during databaseVersioningService running by monitor web service", e);
-            return Response.ok(e).build();
+            return Response.ok(e).header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
         }
     }
 }

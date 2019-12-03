@@ -34,4 +34,8 @@ public interface ICommandeService {
     public String simulateMagasinCommande(int idProduit, int idMagasin, int idEntrepot);
     
     public List<Map<String, Object>> readFormater();
+    
+    public List<Map<String, Object>> readStatusFormater(int status);
+    
+    public List<Commande> readByStatus(int status);
 }
