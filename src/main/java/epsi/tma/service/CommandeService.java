@@ -37,12 +37,13 @@ public class CommandeService implements ICommandeService {
     @Autowired
     ICommandeStatutLogService commandeStatutLogService;
 
-    /*
-     * simulate command from magasin
+    /**
+     * Simulate orders from magasin
      * @param idProduit
      * @param idMagasin
      * @param idEntrepot
      * @param idEtat
+     * @return message of the executed action
      */
     @Override
     public String simulateMagasinCommande(int idProduit, int idMagasin, int idEntrepot) {
@@ -65,6 +66,12 @@ public class CommandeService implements ICommandeService {
         return response;
     }
 
+    /**
+    * Update state of an order
+    * @param newState the new state
+    * @param idCommande the order to update
+    * @return message of the executed action
+    */
     @Override
     public String updateCommand(int newState, int idCommande) {
         String response = new String();
@@ -88,6 +95,12 @@ public class CommandeService implements ICommandeService {
         return response;
     }
     
+    /**
+     * Update all orders with a particular state
+     * @param oldState the current state to update
+     * @param newState the new state
+     * @return message of the executed action
+     */
     @Override
     public String updateAllCommand(int oldState, int newState) {
         String response = new String();
@@ -102,15 +115,11 @@ public class CommandeService implements ICommandeService {
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                     String action = "update " + oldState + " order";
                     LOG.debug("TRY TO LOG ACTION : {}", action);
-                    for (Commande cmd : commandes){
-                        commandeStatutLogService.create("ENTREPOT 1", action, cmd.getIdCommande(), timestamp, 1, newState, "UPDATE");
-                    }
+                    commandeStatutLogService.create("ENTREPOT 1", action, 0, timestamp, 1, newState, "UPDATE_ALL");
                 } else {
-                    String action = "fail to update order with "+ oldState +"status to "+ newState;
+                    String action = "fail to update all orders with "+ oldState +" status to "+ newState;
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    for (Commande cmd : commandes){
-                        commandeStatutLogService.create("ENTREPOT 1", action, cmd.getIdCommande(), timestamp, 1, newState, "ERROR");
-                    }
+                    commandeStatutLogService.create("ENTREPOT 1", action, 0, timestamp, 1, newState, "ERROR_ALL");
                 }
             } catch (Exception e) {
                 response = e.getLocalizedMessage();
@@ -122,6 +131,10 @@ public class CommandeService implements ICommandeService {
         return response;
     }
 
+    /**
+     * Allow to read orders data
+     * @return list which contains informations about orders
+     */
     @Override
     public List<Map<String, Object>> readFormater() {
         List<Commande> result = read();
@@ -154,26 +167,53 @@ public class CommandeService implements ICommandeService {
         return response;
     }
 
+    /**
+     * Create orders
+     * @param pIdProduit
+     * @param pIdMagasin
+     * @param pIdEntrepot
+     * @param pIdEtat
+     * @return id of the new order
+     */
     @Override
     public int create(int pIdProduit, int pIdMagasin, int pIdEntrepot, int pIdEtat) {
         return commandeDAO.create(pIdProduit, pIdMagasin, pIdEntrepot, pIdEtat);
     }
 
+    /**
+     * Service function to update state of an order
+     * @param newState the new state
+     * @param idCommand the order to update
+     * @return message of the executed action
+     */
     @Override
     public String update(int newState, int idCommand) {
         return commandeDAO.update(newState, idCommand);
     }
     
+    /**
+     * Service function to update state of all orders with a particular state 
+     * @param oldState the current state
+     * @param newState the new state
+     * @return message of the executed action
+     */
     @Override
     public String updateAll(int oldState, int newState) {
         return commandeDAO.updateAll(oldState, newState);
     }
 
+    /**
+     * Service function to read a list of orders
+     * @return list of order object 
+     */
     @Override
     public List<Commande> read() {
         return commandeDAO.read();
     }
-
+    
+    /**
+     * Service method to delete all orders
+     */
     @Override
     public void clear() {
         commandeDAO.clear();
@@ -181,6 +221,9 @@ public class CommandeService implements ICommandeService {
         commandeStatutLogService.create("ADMIN", "Clear all order", 0, timestamp, 0, 0, "DELETE");
     }
 
+    /**
+     * Service method to delete all orders with the final state (4)
+     */
     @Override
     public void clearTodayStatus() {
         commandeDAO.clearTodayStatus();
